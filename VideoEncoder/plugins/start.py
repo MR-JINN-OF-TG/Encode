@@ -21,11 +21,11 @@ from .. import sudo_users
 from ..utils.buttons import start, check_user
 
 
-@Client.on_message(filters.command(['start', 'help']))
+@Client.on_message(filters.command(['start]))
 async def start_message(app, message):
-    user_id = message.from_user.id
-    if user_id in sudo_users:
-        text = f"Hey! I'm <a href='https://telegra.ph/file/11379aba315ba245ebc7b.jpg'>VideoEncoder</a>,\nI can encode telegram files in x264, just send me a video."
-        await message.reply(text=text, reply_markup=start)
-    else:
-        await check_user(message)
+    await message.reply(text="OkDa Started", reply_markup=start)
+ 
+@Client.on_message(filters.command(['help']))
+async def hlp_message(app, message):
+    await message.reply(text="OkDa Helped", reply_markup=start)
+ 
