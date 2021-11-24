@@ -47,24 +47,12 @@ async def encode(filepath):
     print(filepath)
 
     # Codec and Bits
-    codec = '-c:v libx265 -pix_fmt yuv420p10le -s 1280x720'
-
-    # CRF
-    crf = ' -preset medium -crf 22 -x265-params profile=main10 -tag:v hvc1'
-
-    # Optional
-    video_opts = f' -tune {t} -map 0:v? -map_chapters 0 -map_metadata 0 -c:s copy -map 0:s?'
-    # Audio
-    a_i = get_codec(filepath, channel='a:0')
-    a = audio
-    if a_i == []:
-        audio_opts = ' -map 0:a? -c:a aac -b:a 192k -threads 8'
-        
+    codec = '-c:v libx265 -pix_fmt yuv420p10le -s 1280x720 -preset medium -crf 22 -x265-params profile=main10 -tag:v hvc1 -tune {t} -map 0:v? -map_chapters 0 -map_metadata 0 -c:s copy -map 0:s? -map 0:a? -c:a aac -b:a 192k'
+    video_opts = ' -threads 8'
 
     # Finally
     command = ['ffmpeg', '-y', '-i', filepath]
-    command.extend((codec.split() + video_opts.split() +
-                   crf.split() + audio_opts.split()))
+    command.extend((codec.split() + video_opts.split()))
     proc = await asyncio.create_subprocess_exec(*command, output_filepath, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
     await proc.communicate()
     return output_filepath
