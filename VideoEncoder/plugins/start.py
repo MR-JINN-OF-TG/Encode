@@ -18,7 +18,7 @@ from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
 from .. import sudo_users
-from ..utils.buttons import start, check_user
+from ..utils.buttons import check_user
 
 
 @Client.on_message(filters.command(['start']))
