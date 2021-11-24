@@ -21,7 +21,7 @@ from .. import sudo_users
 from ..utils.buttons import start, check_user
 
 
-@Client.on_message(filters.command(['start]))
+@Client.on_message(filters.command(['start']))
 async def start_message(app, message):
     await message.reply(text="OkDa Started")
  
