@@ -32,11 +32,11 @@ sudo_users = list(set(int(x) for x in os.environ.get("SUDO_USERS").split()))
 # Optional
 download_dir = os.environ.get("DOWNLOAD_DIR", "VideoEncoder/utils/downloads/")
 encode_dir = os.environ.get("ENCODE_DIR", "VideoEncoder/utils/encodes/")
-upload_doc = os.environ.get("UPLOAD_AS_DOC", False)
+upload_doc = os.environ.get("UPLOAD_AS_DOC", True)
 # Encode Settings
-preset = os.environ.get("PRESET", 'sf')
+preset = os.environ.get("PRESET", 'm')
 tune = os.environ.get("TUNE", "film")
-audio = os.environ.get("AUDIO", "opus")
+audio = os.environ.get("AUDIO", "aac")
 
 SOURCE_MESSAGE = '''
 # VideoEncoder - a telegram bot for compressing/encoding videos in h264 format.
