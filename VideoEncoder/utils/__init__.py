@@ -2,7 +2,7 @@ from pyrogram import filters
 from pyrogram.errors import RPCError
 
 from .. import app as a
-from . import buttons, ffmpeg, progress, task
+from . import buttons, ffmpeg, progress, tasks
 
 
 @a.on_message(filters.command('so' 'ur' 'ce'))
