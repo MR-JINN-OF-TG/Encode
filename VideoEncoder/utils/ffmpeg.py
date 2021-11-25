@@ -45,49 +45,16 @@ async def encode(filepath):
     if os.path.isfile(output_filepath):
         print(f'Warning! "{output_filepath}": file already exists')
     print(filepath)
-
-    # Codec and Bits
-    codec = '-c:v libx264 -pix_fmt yuv420p'
-
-    # CRF
-    crf = '-crf 28'
-
-    # Preset
-    if p == 'uf':
-        preset = '-preset ultrafast'
-    elif p == 'sf':
-        preset = '-preset superfast'
-    elif p == 'vf':
-        preset = '-preset veryfast'
-    elif p == 'f':
-        preset = '-preset fast'
-    elif p == 'm':
-        preset = '-preset medium'
-
-    # Optional
-    video_opts = f'-tune {t} -map 0:v? -map_chapters 0 -map_metadata 0'
-
-    # Copy Subtitles
+    codec = '-c:v libx264 -pix_fmt yuv420p10le -x265-params profile=main10'
+    crf = '-crf 23'
+    preset = '-preset medium'
+    video_opts = f'-tune {t} -map 0:v? -map_chapters 0 -map_metadata 0 -tag:v hvc1'
     subs_i = get_codec(filepath, channel='s:0')
     if subs_i == []:
         subtitles = ''
     else:
         subtitles = '-c:s copy -map 0:s?'
-
-    # Audio
-    a_i = get_codec(filepath, channel='a:0')
-    a = audio
-    if a_i == []:
-        audio_opts = ''
-    else:
-        audio_opts = '-map 0:a?'
-        if a == 'aac':
-            audio_opts += ' -c:a aac -b:a 128k'
-        elif a == 'opus':
-            audio_opts += ' -c:a libopus -vbr on -b:a 96k'
-        elif a == 'copy':
-            audio_opts += ' -c:a copy'
-
+    audio_opts += ' -c:a aac -b:a 128k'
     finish = '-threads 8'
 
     # Finally
