@@ -1,18 +1,3 @@
-# VideoEncoder - a telegram bot for compressing/encoding videos in h264 format.
-# Copyright (c) 2021 WeebTime/VideoEncoder
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as published
-# by the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU Affero General Public License for more details.
-#
-# You should have received a copy of the GNU Affero General Public License
-# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import asyncio
 import os
@@ -45,14 +30,22 @@ async def encode(filepath):
     if os.path.isfile(output_filepath):
         print(f'Warning! "{output_filepath}": file already exists')
     print(filepath)
-
-    # Codec and Bits
-    codec = '-c:v libx265 -pix_fmt yuv420p10le -s 1280x720 -preset medium -crf 22 -x265-params profile=main10 -tag:v hvc1 -tune {t} -map 0:v? -map_chapters 0 -map_metadata 0 -c:s copy -map 0:s? -map 0:a? -c:a aac -b:a 192k'
-    video_opts = ' -threads 8'
+    codec = '-c:v libx264 -pix_fmt yuv420p10le -x265-params profile=main10'
+    crf = '-crf 23'
+    preset = '-preset medium'
+    video_opts = f'-tune {t} -map 0:v? -map_chapters 0 -map_metadata 0 -tag:v hvc1'
+    subs_i = get_codec(filepath, channel='s:0')
+    if subs_i == []:
+        subtitles = ''
+    else:
+        subtitles = '-c:s copy -map 0:s?'
+    audio_opts += ' -c:a aac -b:a 192k'
+    finish = '-threads 8'
 
     # Finally
     command = ['ffmpeg', '-y', '-i', filepath]
-    command.extend((codec.split() + video_opts.split()))
+    command.extend((codec.split() + preset.split() + video_opts.split() +
+                   crf.split() + subtitles.split() + audio_opts.split() + finish.split()))
     proc = await asyncio.create_subprocess_exec(*command, output_filepath, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
     await proc.communicate()
     return output_filepath
