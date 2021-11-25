@@ -39,7 +39,16 @@ async def encode(filepath):
         subtitles = ''
     else:
         subtitles = '-c:s copy -map 0:s?'
-    audio_opts += ' -c:a aac -b:a 192k'
+    
+    a_i = get_codec(filepath, channel='a:0')
+    a = audio
+    if a_i == []:
+        audio_opts = ''
+    else:
+        audio_opts = '-map 0:a?'
+        if a == 'aac':
+            audio_opts += ' -c:a aac -b:a 128k'
+
     finish = '-threads 8'
 
     # Finally
