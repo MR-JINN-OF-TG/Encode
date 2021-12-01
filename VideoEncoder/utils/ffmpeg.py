@@ -1,14 +1,10 @@
-
 import asyncio
 import os
 import subprocess
 import time
-
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
-
 import ffmpeg
-
 from .. import audio, encode_dir
 from .. import preset as p
 from .. import tune as t
@@ -20,13 +16,11 @@ def get_codec(filepath, channel='v:0'):
                                       'default=nokey=1:noprint_wrappers=1', filepath])
     return output.decode('utf-8').split()
 
-
 async def encode(filepath):
     path, extension = os.path.splitext(filepath)
     name = path.split('/')
     output_filepath = encode_dir + name[len(name)-1] + '.mkv'
     assert(output_filepath != filepath)
-
     if os.path.isfile(output_filepath):
         print(f'Warning! "{output_filepath}": file already exists')
     print(filepath)
@@ -38,8 +32,7 @@ async def encode(filepath):
     if subs_i == []:
         subtitles = ''
     else:
-        subtitles = '-c:s copy -map 0:s?'
-    
+        subtitles = '-c:s copy -map 0:s'
     a_i = get_codec(filepath, channel='a:0')
     a = audio
     if a_i == []:
@@ -50,7 +43,6 @@ async def encode(filepath):
             audio_opts += ' -c:a aac -b:a 128k'
 
     finish = '-threads 8'
-
     # Finally
     command = ['ffmpeg', '-y', '-i', filepath]
     command.extend((codec.split() + preset.split() + video_opts.split() +
@@ -58,7 +50,6 @@ async def encode(filepath):
     proc = await asyncio.create_subprocess_exec(*command, output_filepath, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE)
     await proc.communicate()
     return output_filepath
-
 
 def get_thumbnail(in_filename, path, ttl):
     out_filename = os.path.join(path, str(time.time()) + ".jpg")
@@ -74,7 +65,6 @@ def get_thumbnail(in_filename, path, ttl):
         return out_filename
     except ffmpeg.Error as e:
         return None
-
 
 def get_duration(filepath):
     metadata = extractMetadata(createParser(filepath))
