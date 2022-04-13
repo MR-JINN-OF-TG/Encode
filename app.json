@@ -1,0 +1,25 @@
+{
+    "name": "Encode",
+    "description": "Wtd",
+    "keywords": [
+        "Encode"
+    ],
+    "repository": "https://github.com/MwK-Noob-Developers/Video-Encoder-Bot",
+    "website": "https://github.com/MwK-Noob-Developers/Video-Encoder-Bot",
+    "success_url": "https://github.com/MwK-Noob-Developers/Video-Encoder-Bot",
+    "stack": "heroku-20",
+    "buildpacks": [
+        {
+            "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest "
+        },
+        {
+            "url": " heroku/python"
+        }
+    ],
+    "formation": {
+        "worker": {
+            "quantity": 1,
+            "size": "free"
+        }
+    }
+}
